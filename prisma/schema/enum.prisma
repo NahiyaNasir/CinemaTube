@@ -1,0 +1,24 @@
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+enum UserStatus {
+  ACTIVE // default
+  BLOCKED // suspended indefinitely
+  PENDING // if new admin or moderator not approved by admin
+  UNVERIFIED // if email not verified
+  DELETED // soft delete
+}
+
+
+
+enum PaymentStatus {
+  PAID
+  UNPAID
+}
+
+
+
+
