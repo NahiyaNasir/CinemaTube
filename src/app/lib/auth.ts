@@ -2,8 +2,9 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { envVars } from "../config/env";
 import { prisma } from "./prisma";
-import { Role } from "../../generated/prisma/enums";
-
+import { Role, UserStatus } from "../../generated/prisma/enums";
+import { sendEmail } from "../utils/email";
+import { bearer, emailOTP,} from "better-auth/plugins";
 export const auth = betterAuth({
   baseURL: envVars.BETTER_AUTH_URL,
   secret: envVars.BETTER_AUTH_SECRET,
@@ -21,7 +22,7 @@ export const auth = betterAuth({
       status: {
         type: "string",
         required: true,
-        // defaultValue: UserStatus.ACTIVE,
+        defaultValue: UserStatus.ACTIVE,
       },
 
       needPasswordChange: {
@@ -54,7 +55,7 @@ export const auth = betterAuth({
       mapProfileToUser: () => {
         return {
           role: Role.USER,
-          // status: UserStatus.ACTIVE,
+          status: UserStatus.ACTIVE,
           needPasswordChange: false,
           isDeleted: false,
           deletedAt: null,
@@ -75,66 +76,68 @@ export const auth = betterAuth({
       maxAge: 60 * 60 * 60 * 24, // 1 day in seconds
     },
   },
-  //  plugins: [
-  //   bearer(),
-  //   emailOTP({
-  //     overrideDefaultEmailVerification: true,
-  //     async sendVerificationOTP({ email, otp, type }) {
-  //       if (type === "email-verification") {
-  //         const user = await prisma.user.findUnique({
-  //           where: {
-  //             email,
-  //           },
-  //         });
+   plugins: [
+    bearer(),
+    emailOTP({
+      overrideDefaultEmailVerification: true,
+      async sendVerificationOTP({ email, otp, type }) {
+        if (type === "email-verification") {
+          const user = await prisma.user.findUnique({
+            where: {
+              email,
+            },
+          });
 
-  //         if (!user) {
-  //           console.error(
-  //             `User with email ${email} not found. Cannot send verification OTP.`,
-  //           );
-  //           return;
-  //         }
+          if (!user) {
+            console.error(
+              `User with email ${email} not found. Cannot send verification OTP.`,
+            );
+            return;
+          }
 
-  //         //    if(user && user.role === Role.SUPER_ADMIN){
-  //         //     console.log(`User with email ${email} is a super admin. Skipping sending verification OTP.`);
-  //         //     return;
-  //         //    }
+          //    if(user && user.role === Role.SUPER_ADMIN){
+          //     console.log(`User with email ${email} is a super admin. Skipping sending verification OTP.`);
+          //     return;
+          //    }
 
-  //         if (user && !user.emailVerified) {
-  //           sendEmail({
-  //             to: email,
-  //             subject: "Verify your email",
-  //             templateName: "otp",
-  //             templateData: {
-  //               name: user.name,
-  //               otp,
-  //             },
-  //           });
-  //         }
-  //       } else if (type === "forget-password") {
-  //         const user = await prisma.user.findUnique({
-  //           where: {
-  //             email,
-  //           },
-  //         });
+          if (user && !user.emailVerified) {
+            sendEmail({
+              to: email,
+              subject: "Verify your email",
+              templateName: "otp",
+              templateData: {
+                name: user.name,
+                otp,
+              },
+            });
+          }
+        } else if (type === "forget-password") {
+          const user = await prisma.user.findUnique({
+            where: {
+              email,
+            },
+          });
 
-  //         if (user) {
-  //           sendEmail({
-  //             to: email,
-  //             subject: "Password Reset OTP",
-  //             templateName: "reset",
-  //             templateData: {
-  //               name: user.name,
-  //               otp,
-  //             },
-  //           });
-  //         }
-  //       }
-  //     },
-  //     expiresIn: 2 * 60, // 2 minutes in seconds
-  //     otpLength: 6,
-  //   }),
-  // ],
-     trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:5000", envVars.FRONTEND_URL],
+          if (user) {
+            sendEmail({
+              to: email,
+              subject: "Password Reset OTP",
+              templateName: "reset",
+              templateData: {
+                name: user.name,
+                otp,
+              },
+            });
+          }
+        }
+      },
+      expiresIn: 2 * 60, // 2 minutes in seconds
+      otpLength: 6,
+    }),
+  ],
+    
+  
+  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:5000", envVars.FRONTEND_URL],
    advanced: {
     useSecureCookies: false,
     cookies: {

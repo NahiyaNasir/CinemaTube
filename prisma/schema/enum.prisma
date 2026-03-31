@@ -12,6 +12,17 @@ enum UserStatus {
   DELETED // soft delete
 }
 
+enum MediaType {
+  MOVIE
+  SERIES
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 
 
 enum PaymentStatus {

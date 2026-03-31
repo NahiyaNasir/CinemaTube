@@ -14,9 +14,15 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
-
+  reviews       Review[]
+  ratings       Rating[]
+  mediaAdded    Media[]   @relation("MediaAddedBy")
+  watchList     WatchList[]
+  profile        Profile?
   @@unique([email])
   @@map("user")
+  favorites Favorite[]
+  bookmarks Bookmark[]
 }
 
 model Session {

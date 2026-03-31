@@ -1,0 +1,13 @@
+model Rating {
+  id        String   @id @default(uuid())
+  score     Int      
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mediaId   String
+  media     Media    @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mediaId])
+  @@map("ratings")
+}
