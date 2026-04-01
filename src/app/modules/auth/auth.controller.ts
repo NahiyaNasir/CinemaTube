@@ -17,9 +17,10 @@ import { IRequestUser } from "../../interface";
 const register = catchAsync(async (req: Request, res: Response) => {
   const result = await authService.registerUser(req.body);
   const { accessToken, refreshToken, token, ...rest } = result;
+  console.log(result);
 
   tokenUtils.setAccessTokenCookie(res, accessToken);
-  tokenUtils.setRefreshTokenCookie(res,  await refreshToken);
+  tokenUtils.setRefreshTokenCookie(res,  refreshToken);
   tokenUtils.setBetterAuthSessionCookie(res, token as string);
 
   sendResponse(res, {
@@ -41,7 +42,7 @@ const login = catchAsync(async (req: Request, res: Response) => {
   const { accessToken, refreshToken, token, ...rest } = result;
 
   tokenUtils.setAccessTokenCookie(res, accessToken);
-  tokenUtils.setRefreshTokenCookie(res, await  refreshToken);
+  tokenUtils.setRefreshTokenCookie(res,   refreshToken);
   tokenUtils.setBetterAuthSessionCookie(res, token as string);
 
   sendResponse(res, {

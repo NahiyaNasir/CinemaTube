@@ -1,7 +1,8 @@
 import app from './app';
-import config from './config';
+
 
 import { Server } from "http";
+import { envVars } from './app/config/env';
 
 
 let server : Server;

@@ -5,11 +5,11 @@ enum Role {
 }
 
 enum UserStatus {
-  ACTIVE // default
-  BLOCKED // suspended indefinitely
-  PENDING // if new admin or moderator not approved by admin
-  UNVERIFIED // if email not verified
-  DELETED // soft delete
+  BLOCKED
+  DELETED
+  ACTIVE
+  PENDING
+  UNVERIFIED
 }
 
 enum MediaType {
@@ -23,13 +23,7 @@ enum ReviewStatus {
   REJECTED
 }
 
-
-
 enum PaymentStatus {
   PAID
   UNPAID
 }
-
-
-
-

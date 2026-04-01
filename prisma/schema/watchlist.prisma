@@ -3,9 +3,8 @@ model WatchList {
   userId    String
   mediaId   String
   createdAt DateTime @default(now())
-
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   media     Media    @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, mediaId]) 
+  @@unique([userId, mediaId])
 }

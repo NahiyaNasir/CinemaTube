@@ -1,52 +1,47 @@
 model Profile {
-  id     String @id @default(uuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
-
+  id         String     @id @default(uuid())
+  userId     String     @unique
   name       String?
   email      String?
   image      String?
   bio        String?
   avatar     String?
   coverImage String?
-
-  favorite Favorite[]
-  bookmark Bookmark[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  bookmark   Bookmark[]
+  favorite   Favorite[]
+  user       User       @relation(fields: [userId], references: [id])
+  medias     Media[]    @relation("MediaProfiles")
 
   @@map("profile")
-  medias Media[] @relation("MediaProfiles")
 }
 
 model Bookmark {
-  id      String @id @default(uuid())
-  userId  String
-  user    User   @relation(fields: [userId], references: [id])
-  mediaId String
-  media   Media  @relation(fields: [mediaId], references: [id])
-
+  id        String   @id @default(uuid())
+  userId    String
+  mediaId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  profile   Profile? @relation(fields: [profileId], references: [id])
   profileId String?
+  media     Media    @relation(fields: [mediaId], references: [id])
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@map("bookmark")
 }
 
 model Favorite {
-  id      String @id @default(uuid())
-  userId  String
-  user    User   @relation(fields: [userId], references: [id])
-  mediaId String
-  media   Media  @relation(fields: [mediaId], references: [id])
-
+  id        String   @id @default(uuid())
+  userId    String
+  mediaId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  profile   Profile? @relation(fields: [profileId], references: [id])
   profileId String?
+  media     Media    @relation(fields: [mediaId], references: [id])
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@map("favorite")

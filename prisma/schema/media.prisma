@@ -1,29 +1,27 @@
 model Media {
-  id            String    @id @default(uuid())
+  id            String      @id @default(uuid())
   title         String
   description   String
-  type          MediaType 
+  type          MediaType
   releaseDate   DateTime
-  genre         String[]  
+  genre         String[]
   coverImage    String
   trailerUrl    String?
   streamUrl     String?
-  averageRating Float     @default(0)
-  totalRatings  Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  // Relations
+  averageRating Float       @default(0)
+  totalRatings  Int         @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   createdById   String?
-  createdBy     User?     @relation("MediaAddedBy", fields: [createdById], references: [id])
+  watchList     WatchList[]
+  bookmarks     Bookmark[]
+  favorites     Favorite[]
+  createdBy     User?       @relation("MediaAddedBy", fields: [createdById], references: [id])
   ratings       Rating[]
   reviews       Review[]
-  watchList     WatchList[]
-  genres        Genre[]   @relation("MediaGenres")
+  genres        Genre[]     @relation("MediaGenres")
+  profiles      Profile[]   @relation("MediaProfiles")
 
   @@index([title, type])
   @@map("media")
-  favorites Favorite[]
-  profiles Profile[] @relation("MediaProfiles")
-  bookmarks Bookmark[]
 }

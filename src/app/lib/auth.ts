@@ -108,6 +108,7 @@ export const auth = betterAuth({
               templateData: {
                 name: user.name,
                 otp,
+              expires:2 * 60, // 2 minutes in seconds
               },
             });
           }

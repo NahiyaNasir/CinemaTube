@@ -7,6 +7,8 @@ import { envVars } from "../config/env";
 import { handlePrismaClientKnownRequestError, handlePrismaClientUnknownError, handlePrismaClientValidationError, handlerPrismaClientInitializationError, handlerPrismaClientRustPanicError } from "../errorHelpers/handlePrismaError";
 import { TErrorResponse, TErrorSources } from "../interface/error.interface";
 import AppError from "../errorHelpers/AppError";
+import { Prisma } from "../../generated/prisma/client";
+import { handleZodError } from "./handleZodError";
 
 
 
