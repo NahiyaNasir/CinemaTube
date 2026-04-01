@@ -71,6 +71,8 @@ export const checkAuth = (...authRoles: Role[]) => async (req: Request, res: Res
                     status: user.status,
                     name: user.name,
                     isDeleted: user.isDeleted,
+
+                    
                 }
             }
 

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { validateRequest } from "../../middlewares/validateRequest";
 import { AuthController } from "./auth.controller";
 import { AuthValidation } from "./auth.validate";
-import { checkAuth } from "../../middlewares/checkAurth";
+import { checkAuth } from "../../middlewares/checkAuth";
 import { Role } from "../../../generated/prisma/enums";
 
 
