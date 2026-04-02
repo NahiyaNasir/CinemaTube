@@ -17,7 +17,7 @@ import { IRequestUser } from "../../interface";
 const register = catchAsync(async (req: Request, res: Response) => {
   const result = await authService.registerUser(req.body);
   const { accessToken, refreshToken, token, ...rest } = result;
-  console.log(result);
+  // console.log(result);
 
   tokenUtils.setAccessTokenCookie(res, accessToken);
   tokenUtils.setRefreshTokenCookie(res,  refreshToken);

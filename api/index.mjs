@@ -2175,7 +2175,8 @@ var handleZodError = (err) => {
 };
 
 // src/app/middlewares/globalError.ts
-var globalErrorHandler = async (err, req, res, next) => {
+var globalErrorHandler = (err, req, res, next) => {
+  if (res.headersSent) return next(err);
   if (envVars.NODE_ENV === "development") {
     console.log("Error from Global Error Handler", err);
   }
@@ -2247,7 +2248,7 @@ var globalErrorHandler = async (err, req, res, next) => {
     error: envVars.NODE_ENV === "development" ? err : void 0,
     stack: envVars.NODE_ENV === "development" ? stack : void 0
   };
-  res.status(statusCode).json(errorResponse);
+  return res.status(statusCode).json(errorResponse);
 };
 
 // src/app/middlewares/notFound.ts
