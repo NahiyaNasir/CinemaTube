@@ -16,12 +16,13 @@ import { handleZodError } from "./handleZodError";
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const globalErrorHandler = async (err: any, req: Request, res: Response, next: NextFunction) => {
+export const globalErrorHandler =  (err: any, req: Request, res: Response, next: NextFunction) => {
+     if (res.headersSent) return next(err);
     if (envVars.NODE_ENV === 'development') {
         console.log("Error from Global Error Handler", err);
     }
 
-    // await deleteUploadedFilesFromGlobalErrorHandler(req);
+
 
     let errorSources: TErrorSources[] = []
     let statusCode: number = status.INTERNAL_SERVER_ERROR;
@@ -127,5 +128,5 @@ export const globalErrorHandler = async (err: any, req: Request, res: Response, 
         stack: envVars.NODE_ENV === 'development' ? stack : undefined,
     }
 
-    res.status(statusCode).json(errorResponse);
+   return  res.status(statusCode).json(errorResponse);
 }
