@@ -8,6 +8,9 @@ model Media {
   coverImage    String
   trailerUrl    String?
   streamUrl     String?
+  pricing       Pricing     @default(FREE)
+  buyPrice      Float?
+  rentalPrice   Float?
   averageRating Float       @default(0)
   totalRatings  Int         @default(0)
   createdAt     DateTime    @default(now())
@@ -21,6 +24,8 @@ model Media {
   reviews       Review[]
   genres        Genre[]     @relation("MediaGenres")
   profiles      Profile[]   @relation("MediaProfiles")
+  mediaPurchases MediaPurchase[]
+  rentals       Rental[]
 
   @@index([title, type])
   @@map("media")

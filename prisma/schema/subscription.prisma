@@ -1,0 +1,23 @@
+
+model Subscription {
+  id                 String             @id @default(uuid())
+  userId             String             @unique
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan               SubscriptionPlan   @default(FREE)
+  status             SubscriptionStatus @default(ACTIVE)
+  stripeCustomerId   String?            @unique
+  stripePriceId      String?
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+  cancelAtPeriodEnd  Boolean            @default(false)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  payments Payment[]
+
+  @@map("subscriptions")
+  @@index([userId])
+  @@index([plan])
+  @@index([status])
+  @@index([currentPeriodEnd])
+}

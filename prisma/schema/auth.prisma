@@ -20,6 +20,10 @@ model User {
   ratings            Rating[]
   reviews            Review[]
   sessions           Session[]
+  payments           Payment[]
+  subscriptions      Subscription[]
+  mediaPurchases     MediaPurchase[]
+  rentals            Rental[]
 
   @@map("user")
 }

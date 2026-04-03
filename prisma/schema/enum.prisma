@@ -27,3 +27,46 @@ enum PaymentStatus {
   PAID
   UNPAID
 }
+enum MediaPurchaseType {
+  RENTAL
+  BUY
+}
+
+enum MediaPurchaseStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+enum RentalStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+enum PurchaseType {
+  BUY
+  RENT
+}
+
+enum Pricing {
+  FREE
+  PREMIUM
+  RENTAL
+}
+enum SubscriptionPlan {
+  FREE
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PAST_DUE
+}
+
+enum SubStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+}
