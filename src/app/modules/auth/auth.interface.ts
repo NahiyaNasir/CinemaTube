@@ -2,6 +2,7 @@
     name: string;
     email: string;
     password: string;
+    role:string
     acceptTerms: boolean;
     rememberMe: boolean;
 }

@@ -13,5 +13,6 @@ import { GenreRoutes } from "../modules/genre/genre.route";
    router.use("/favorites", FavoriteRouter);
    router.use("/genres", GenreRoutes);
    router.use("/bookmarks", BookmarkRouter);
+  
 
 export const IndexRoutes = router;

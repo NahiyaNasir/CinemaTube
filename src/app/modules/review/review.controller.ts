@@ -4,7 +4,8 @@ import { sendResponse } from "../shared/sendResponse";
 import status from "http-status";
 import { catchAsync } from "../shared/catchAsync";
 import { IRequestUser } from "../../interface";
-import { ReviewsService } from "./review.servise";
+import { ReviewsService } from "./review.service";
+
 
 const getAllReview = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;

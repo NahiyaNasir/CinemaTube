@@ -1,8 +1,8 @@
 import status from "http-status";
-import { Prisma, UserStatus } from "../../../generated/prisma/client";
+import {  UserStatus } from "../../../generated/prisma/client";
 import AppError from "../../errorHelpers/AppError";
 import { prisma } from "../../lib/prisma";
-import { tokenUtils } from "../../utils/token";
+import {  tokenUtils } from "../../utils/token";
 import { auth } from "../../lib/auth";
 import {
   IChangePasswordPayload,
@@ -14,66 +14,64 @@ import { envVars } from "../../config/env";
 import { jwtUtils } from "../../utils/jwt";
 
 const registerUser = async (payload: IRegisterPayload) => {
-  const { name, email, password } = payload;
+  const { name, email, password, role, acceptTerms, rememberMe } = payload;
 
   const data = await auth.api.signUpEmail({
-    body: { name, email, password },
+    body: {
+      name,
+      email,
+      password,
+    },
   });
 
-  if (!data.user) {
-    throw new AppError(status.BAD_REQUEST, "Failed to register user");
+if (!data.user?.id) {
+    throw new AppError(status.FORBIDDEN, "User not created by auth service");
   }
 
   try {
-  
-    const profile = await prisma.$transaction(async (tx) => {
-    
-      const userExists = await tx.user.findUnique({
-        where: { id: data.user.id },
-      });
 
-      if (!userExists) {
-        throw new AppError(
-          status.BAD_REQUEST,
-          "User not found "
-        );
-      }
-
-      return await tx.profile.create({  
-        data: {
-          userId: data.user.id,
-          name: payload.name,
-          email: payload.email,
-        },
-      });
-    });
-
-    const tokenPayload = {
+    const accessToken = tokenUtils.getAccessToken({
       userId: data.user.id,
       role: data.user.role,
-      name: data.user.name,
       email: data.user.email,
+      name: data.user.name,
       status: data.user.status,
       isDeleted: data.user.isDeleted,
       emailVerified: data.user.emailVerified,
-    };
-
-    const accessToken= await tokenUtils.getAccessToken(tokenPayload);
-    const refreshToken = await tokenUtils.getRefreshToken(tokenPayload);
-
-    return { ...data, profile, accessToken, refreshToken };
-
-  } catch (error) {
-    console.log("Transaction error:", error);
-
-
-    await prisma.user.deleteMany({
-      where: { id: data.user.id },
     });
 
-    throw error;
+    const refreshToken = tokenUtils.getRefreshToken({
+      userId: data.user.id,
+      role: data.user.role,
+      email: data.user.email,
+      name: data.user.name,
+      status: data.user.status,
+      isDeleted: data.user.isDeleted,
+      emailVerified: data.user.emailVerified,
+    });
+
+    return { ...data, accessToken, refreshToken };
+  } catch (err) {
+    console.log("Register Transition Error", err);
+    // Only delete if the user was actually created
+    const userExists = await prisma.user.findUnique({
+      where: {
+        id: data.user.id,
+      },
+    });
+
+    if (userExists) {
+      await prisma.user.delete({
+        where: {
+          id: userExists.id,
+        },
+      });
+    }
+
+    throw new AppError(status.FORBIDDEN, "User not created");
   }
 };
+
 
 const loginUser = async (payload: ILoginUserPayload) => {
   const { email, password } = payload;
