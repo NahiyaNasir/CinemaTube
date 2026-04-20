@@ -1,4 +1,3 @@
-
 model Subscription {
   id                 String             @id @default(uuid())
   userId             String             @unique
@@ -15,9 +14,9 @@ model Subscription {
 
   payments Payment[]
 
-  @@map("subscriptions")
   @@index([userId])
   @@index([plan])
   @@index([status])
   @@index([currentPeriodEnd])
+  @@map("subscriptions")
 }

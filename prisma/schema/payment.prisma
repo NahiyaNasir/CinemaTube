@@ -1,24 +1,23 @@
-
 model Payment {
   id String @id @default(uuid())
 
   subscriptionId String?
   subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  userId         String
+  user           User          @relation(fields: [userId], references: [id])
 
   amount          Float
   currency        String  @default("usd")
   stripePaymentId String? @unique
-  status          String 
+  status          String
 
-  mediaPurchaseId String? @unique
+  mediaPurchaseId String?        @unique
   mediaPurchase   MediaPurchase? @relation(fields: [mediaPurchaseId], references: [id])
 
   createdAt DateTime @default(now())
- 
-  rentalId  String? @unique
-  rental    Rental?        @relation(fields: [rentalId], references: [id])
+
+  rentalId String? @unique
+  rental   Rental? @relation(fields: [rentalId], references: [id])
 
   @@index([subscriptionId])
   @@index([userId])
@@ -28,16 +27,16 @@ model Payment {
 }
 
 model MediaPurchase {
-  id        String   @id @default(uuid())
+  id        String              @id @default(uuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User                @relation(fields: [userId], references: [id])
   mediaId   String
-  media     Media    @relation(fields: [mediaId], references: [id])
+  media     Media               @relation(fields: [mediaId], references: [id])
   type      MediaPurchaseType
   status    MediaPurchaseStatus @default(ACTIVE)
   expiresAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
   payment   Payment?
 
   @@index([userId])
@@ -47,15 +46,15 @@ model MediaPurchase {
 }
 
 model Rental {
-  id        String   @id @default(uuid())
+  id        String       @id @default(uuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User         @relation(fields: [userId], references: [id])
   mediaId   String
-  media     Media    @relation(fields: [mediaId], references: [id])
+  media     Media        @relation(fields: [mediaId], references: [id])
   status    RentalStatus @default(ACTIVE)
   expiresAt DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
   payment   Payment?
 
   @@index([userId])

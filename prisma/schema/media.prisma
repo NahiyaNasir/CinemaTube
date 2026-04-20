@@ -1,32 +1,74 @@
 model Media {
-  id            String      @id @default(uuid())
-  title         String
-  description   String
-  type          MediaType
-  releaseDate   DateTime
-  genre         String[]
-  coverImage    String
-  trailerUrl    String?
-  streamUrl     String?
-  pricing       Pricing     @default(FREE)
-  buyPrice      Float?
-  rentalPrice   Float?
-  averageRating Float       @default(0)
-  totalRatings  Int         @default(0)
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  createdById   String?
-  watchList     WatchList[]
-  bookmarks     Bookmark[]
-  favorites     Favorite[]
-  createdBy     User?       @relation("MediaAddedBy", fields: [createdById], references: [id])
-  ratings       Rating[]
-  reviews       Review[]
-  genres        Genre[]     @relation("MediaGenres")
-  profiles      Profile[]   @relation("MediaProfiles")
-  mediaPurchases MediaPurchase[]
-  rentals       Rental[]
+  id             String   @id @default(uuid())
+  title          String
+  slug           String   @unique
+  type           String
+  description    String   @db.Text
+  releaseYear    Int
+  director       String
+  posterUrl      String?
+  backdropUrl    String?
+  trailerUrl     String?
+  streamingUrl   String?
+  rentalPrice    Decimal? @db.Decimal(10, 2)
+  buyPrice       Decimal? @db.Decimal(10, 2)
+  runtimeMinutes Int?
+  seasons        Int?
+  pricing        Pricing  @default(FREE)
+  isPublished    Boolean  @default(true)
+  isFeatured     Boolean  @default(false)
+  avgRating      Float?
+  reviewCount    Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  @@index([title, type])
+  genres         Genre[]     @relation("MediaGenres")
+  // platforms      MediaPlatform[]
+  reviews        Review[]
+  watchlistItems WatchList[]
+
+  viewCount Int             @default(0)
+  bookmarks Bookmark[]
+  favorites Favorite[]
+  purchases MediaPurchase[]
+  cast      CastMember[]
+  rentals   Rental[]
+  ratings   Rating[]
+  profiles  Profile[]       @relation("MediaProfiles")
+  users     User[]          @relation("MediaAddedBy")
+
+  @@unique([title, releaseYear])
+  @@index([title])
+  @@index([type])
+  @@index([releaseYear])
+  @@index([director])
+  @@index([pricing])
+  @@index([isFeatured])
+  @@index([createdAt])
+  @@index([viewCount])
   @@map("media")
 }
+
+model CastMember {
+  id      String  @id @default(uuid())
+  name    String
+  role    String
+  image   String?
+  mediaId String
+  media   Media   @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@map("cast_members")
+}
+
+// model MediaPlatform {
+//   id         String   @id @default(uuid())
+//   mediaId    String
+//   media      Media    @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+//   platformId String
+//   platform   Platform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+
+//   @@unique([mediaId, platformId])
+//   @@index([mediaId])
+//   @@index([platformId])
+//   @@map("media_platforms")
+// }

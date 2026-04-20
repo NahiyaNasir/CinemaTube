@@ -10,7 +10,7 @@ import { SubscriptionService } from "./sub.service";
 const getPlans = catchAsync(async (req, res) => {
   const result = await SubscriptionService.getPlans();
   sendResponse(res, {
-    statusCode: httpStatus.OK,
+    httpStatusCode: httpStatus.OK,
     success: true,
     message: "Subscription plans retrieved successfully",
     data: result,
@@ -18,7 +18,6 @@ const getPlans = catchAsync(async (req, res) => {
 });
 
 const createCheckoutSession = catchAsync(async (req, res) => {
-  // Using user metadata attached to the request (from authentication middleware)
   const user = req.user as any;
   const { plan } = req.body;
 
@@ -37,7 +36,6 @@ const createCheckoutSession = catchAsync(async (req, res) => {
 });
 
 const webhook = catchAsync(async (req, res) => {
-  // Accessing raw body from express.raw() configured in app.ts
   const signature = req.headers["stripe-signature"] as string;
   const result = await SubscriptionService.handleWebhook(req.body, signature);
 
@@ -56,17 +54,17 @@ const getSubscriptionStatus = catchAsync(async (req, res) => {
   });
 });
 
-// const getPaymentHistory = catchAsync(async (req, res) => {
-//   const user = req.user as any;
-//   const result = await SubscriptionService.getPaymentHistory(user.userId);
+const getPaymentHistory = catchAsync(async (req, res) => {
+  const user = req.user as any;
+  const result = await SubscriptionService.getPaymentHistory(user.userId);
 
-//   sendResponse(res, {
-//     httpStatusCode: httpStatus.OK,
-//     success: true,
-//     message: "Payment history retrieved successfully",
-//     data: result,
-//   });
-// });
+  sendResponse(res, {
+    httpStatusCode: httpStatus.OK,
+    success: true,
+    message: "Payment history retrieved successfully",
+    data: result,
+  });
+});
 const cancelSubscription = catchAsync(async (req, res) => {
   const user = req.user as any;
   const result = await SubscriptionService.cancelSubscription(user.userId);
@@ -82,6 +80,6 @@ export const SubscriptionController = {
   createCheckoutSession,
   webhook,
   getSubscriptionStatus,
-//   getPaymentHistory,
+  getPaymentHistory,
   cancelSubscription,
 };

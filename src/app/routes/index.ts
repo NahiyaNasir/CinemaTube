@@ -4,6 +4,10 @@ import { userRoutes } from "../modules/user/user.routes";
 import { FavoriteRouter } from "../modules/favourite/favourite.route";
 import { BookmarkRouter } from "../modules/bookmark/bookmark.route";
 import { GenreRoutes } from "../modules/genre/genre.route";
+import { WatchlistRouter } from "../modules/watchList/watchList.route";
+import { PaymentRoutes } from "../modules/payment/payment.route";
+import { SubscriptionRouter } from "../modules/subscription/sub.routes";
+import { MediaRoutes } from "../modules/media/media.route";
 
 
  const router=Router()
@@ -13,6 +17,10 @@ import { GenreRoutes } from "../modules/genre/genre.route";
    router.use("/favorites", FavoriteRouter);
    router.use("/genres", GenreRoutes);
    router.use("/bookmarks", BookmarkRouter);
+   router.use("/watchlist", WatchlistRouter);
+   router.use("/payment", PaymentRoutes);
+   router.use("/subscriptions",  SubscriptionRouter);
+   router.use("/media",MediaRoutes)
   
 
 export const IndexRoutes = router;

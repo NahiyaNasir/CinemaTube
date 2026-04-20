@@ -6,26 +6,13 @@ import { Role, UserStatus } from "../../generated/prisma/enums";
 import { sendEmail } from "../utils/email";
 import { bearer, emailOTP,} from "better-auth/plugins";
 export const auth = betterAuth({
+  appName:"CinemaTube",
   baseURL: envVars.BETTER_AUTH_URL,
   secret: envVars.BETTER_AUTH_SECRET,
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
-    databaseHooks: {
-    user: {
-      create: {
-        after: async (user) => {
-          await prisma.profile.create({
-            data: {
-              userId: user.id,
-              name: user.name,
-              email: user.email,
-            },
-          });
-        },
-      },
-    },
-  },
+ 
   user: {
     additionalFields: {
       role: {

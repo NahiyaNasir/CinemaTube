@@ -33,8 +33,8 @@ const getAllMedia = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getMediaById = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const result = await MediaService.getMediaById(id as string);
+  const { slug } = req.params;
+  const result = await MediaService.getMediaById(slug as string);
 
   sendResponse(res, {
     httpStatusCode: status.OK,
@@ -74,4 +74,5 @@ export const MediaController = {
   getMediaById,
   updateMedia,
   deleteMedia,
+ 
 };

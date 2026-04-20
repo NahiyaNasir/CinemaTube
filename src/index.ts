@@ -3,12 +3,13 @@ import app from './app';
 
 import { Server } from "http";
 import { envVars } from './app/config/env';
+import { seedAdmin } from './app/utils/seedAdmin';
 
 
 let server : Server;
 const bootstrap =async () => {
    try {
-        // await seedSuperAdmin();
+        await seedAdmin();
         server = app.listen(envVars.PORT, () => {
             console.log(`Server is running on http://localhost:${envVars.PORT}`);
         });

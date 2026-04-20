@@ -1,5 +1,4 @@
 enum Role {
-  SUPER_ADMIN
   ADMIN
   USER
 }
@@ -27,6 +26,7 @@ enum PaymentStatus {
   PAID
   UNPAID
 }
+
 enum MediaPurchaseType {
   RENTAL
   BUY
@@ -37,11 +37,13 @@ enum MediaPurchaseStatus {
   EXPIRED
   CANCELLED
 }
+
 enum RentalStatus {
   ACTIVE
   EXPIRED
   CANCELLED
 }
+
 enum PurchaseType {
   BUY
   RENT
@@ -52,6 +54,7 @@ enum Pricing {
   PREMIUM
   RENTAL
 }
+
 enum SubscriptionPlan {
   FREE
   MONTHLY

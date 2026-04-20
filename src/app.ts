@@ -10,6 +10,7 @@ import { auth } from "./app/lib/auth";
 import { IndexRoutes } from "./app/routes";
 import { globalErrorHandler } from "./app/middlewares/globalError";
 import { notFound } from "./app/middlewares/notFound";
+import { SubscriptionController } from "./app/modules/subscription/sub.controller";
 
 const app: Application = express();
 // app.post("/webhook", express.raw({ type: "application/json" }),PaymentController.handleStripeWebhookEvent )
@@ -29,6 +30,11 @@ app.use(
 app.set("view engine", "ejs");
 app.set("views", path.resolve(process.cwd(), `src/app/templates`));
 app.use("/api/auth", toNodeHandler(auth))
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  SubscriptionController.webhook,
+);
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cookieParser());
@@ -36,6 +42,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1", IndexRoutes);
+
 
 // Basic route
 app.get("/", async (req: Request, res: Response) => {

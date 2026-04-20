@@ -16,7 +16,6 @@ const createMedia = async (data: any): Promise<Media> => {
 };
 
 const getAllMedia = async (query: any): Promise<Media[]> => {
-  // Query processing logic ekhane add korte paro (pagination, search etc.)
   const result = await prisma.media.findMany({
     include: {
       genres: true,
@@ -25,9 +24,15 @@ const getAllMedia = async (query: any): Promise<Media[]> => {
   return result;
 };
 
-const getMediaById = async (id: string): Promise<Media | null> => {
+const getMediaById = async (slug: string): Promise<Media | null> => {
+    await prisma.media.update({
+    where: { slug },
+    data: {
+      viewCount: { increment: 1 },
+    },
+  });
   const result = await prisma.media.findUnique({
-    where: { id },
+    where: { slug },
     include: {
       genres: true,
       reviews: true,

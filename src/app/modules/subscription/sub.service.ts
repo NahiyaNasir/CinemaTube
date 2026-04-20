@@ -84,7 +84,7 @@ const createCheckoutSession = async (
         price_data: {
           currency: "usd",
           product_data: {
-            name: `Censura ${plan} Plan`,
+            name: `CinemaTube  ${plan} Plan`,
             description: `Unlock premium features with ${plan} subscription.`,
           },
           unit_amount: prices[plan],
@@ -257,14 +257,14 @@ const getSubscriptionStatus = async (userId: string) => {
   return subscription;
 };
 
-// const getPaymentHistory = async (userId: string) => {
-//   // Since we don't have a Payment model, returning the subscription(s) is typically enough
-//   const subscriptions = await prisma.subscription.findMany({
-//     where: { userId },
-//     orderBy: { createdAt: "desc" },
-//   });
-//   return subscriptions;
-// };
+const getPaymentHistory = async (userId: string) => {
+  
+  const subscriptions = await prisma.subscription.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+  });
+  return subscriptions;
+};
 
 const cancelSubscription = async (userId: string) => {
   const subscription = await prisma.subscription.findUnique({
@@ -371,6 +371,6 @@ export const SubscriptionService = {
   createCheckoutSession,
   handleWebhook,
   getSubscriptionStatus,
-//   getPaymentHistory,
+  getPaymentHistory,
   cancelSubscription,
 };
