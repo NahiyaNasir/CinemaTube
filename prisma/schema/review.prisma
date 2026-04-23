@@ -2,13 +2,14 @@ model Review {
   id        String       @id @default(uuid())
   content   String
   rating    Int
-  status    ReviewStatus @default(APPROVED)
+  status    ReviewStatus @default(UNPUBLISHED)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   userId    String
   mediaId   String
   media     Media        @relation(fields: [mediaId], references: [id], onDelete: Cascade)
   user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  tags       String[]
+    hasSpoiler Boolean      @default(false)
   @@map("reviews")
 }

@@ -20,7 +20,7 @@ const register = catchAsync(async (req: Request, res: Response) => {
   // console.log(result);
 
   tokenUtils.setAccessTokenCookie(res, accessToken);
-  tokenUtils.setRefreshTokenCookie(res,  refreshToken);
+  tokenUtils.setRefreshTokenCookie(res,await refreshToken);
   tokenUtils.setBetterAuthSessionCookie(res, token as string);
 
   sendResponse(res, {

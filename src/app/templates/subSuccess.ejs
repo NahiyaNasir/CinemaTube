@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Success | CinemaTube</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #050505; color: #ffffff; }
+        .success-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="max-w-md w-full bg-[#111] border border-white/10 rounded-[2.5rem] p-8 text-center shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-24 -left-24 w-48 h-48 bg-emerald-500/20 blur-[80px] rounded-full"></div>
+        
+        <div class="relative z-10 mb-6">
+            <div class="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mx-auto success-pulse">
+                <i class="fas fa-check text-4xl text-white"></i>
+            </div>
+        </div>
+
+        <h1 class="text-3xl font-extrabold mb-2 tracking-tight">Payment Successful!</h1>
+        <p class="text-gray-400 mb-8 leading-relaxed">
+            Welcome to the elite club! Your subscription is now active. Enjoy unlimited access to premium movies and series.
+        </p>
+
+        <div class="bg-white/5 rounded-2xl p-4 mb-8 text-left border border-white/5">
+            <div class="flex justify-between mb-2">
+                <span class="text-gray-500 text-sm">Plan</span>
+                <span class="text-emerald-400 font-bold text-sm uppercase"><%= planName %></span>
+            </div>
+            <div class="flex justify-between mb-2">
+                <span class="text-gray-500 text-sm">Amount Paid</span>
+                <span class="text-white font-semibold text-sm">$<%= amount %></span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-500 text-sm">Transaction ID</span>
+                <span class="text-gray-300 font-mono text-[10px]"><%= transactionId %></span>
+            </div>
+        </div>
+
+        <div class="space-y-3 relative z-10">
+            <a href="/" class="block w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl transition-all shadow-lg shadow-emerald-500/20 active:scale-95">
+                Start Watching Now
+            </a>
+            <a href="/profile" class="block w-full py-4 bg-white/5 hover:bg-white/10 text-gray-300 font-medium rounded-2xl transition-all border border-white/10">
+                Go to Billing Profile
+            </a>
+        </div>
+
+        <p class="mt-8 text-gray-600 text-xs">
+            A confirmation email has been sent to your inbox.
+        </p>
+    </div>
+
+</body>
+</html>

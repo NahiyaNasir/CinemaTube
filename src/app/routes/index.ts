@@ -8,6 +8,7 @@ import { WatchlistRouter } from "../modules/watchList/watchList.route";
 import { PaymentRoutes } from "../modules/payment/payment.route";
 import { SubscriptionRouter } from "../modules/subscription/sub.routes";
 import { MediaRoutes } from "../modules/media/media.route";
+import { ReviewsRoutes } from "../modules/review/review.route";
 
 
  const router=Router()
@@ -21,6 +22,7 @@ import { MediaRoutes } from "../modules/media/media.route";
    router.use("/payment", PaymentRoutes);
    router.use("/subscriptions",  SubscriptionRouter);
    router.use("/media",MediaRoutes)
+   router.use("/reviews",ReviewsRoutes)
   
 
 export const IndexRoutes = router;

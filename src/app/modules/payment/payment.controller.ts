@@ -9,6 +9,7 @@ import { MediaPurchaseType } from "../../../generated/prisma/enums";
 
 const getMyPayments = catchAsync(async (req: Request, res: Response) => {
   const result = await PaymentService.getMyPayments(req.user as IRequestUser);
+  console.log(result,"My payments");
   sendResponse(res, {
     httpStatusCode: httpStatus.OK,
     success: true,
@@ -32,6 +33,8 @@ const getMyMediaPurchases = catchAsync(async (req: Request, res: Response) => {
   const result = await PaymentService.getMyMediaPurchases(
     req.user as IRequestUser,
   );
+  // console.log(result,"My media purchases");
+
   sendResponse(res, {
     httpStatusCode: httpStatus.OK,
     success: true,

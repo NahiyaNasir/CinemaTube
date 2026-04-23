@@ -13,7 +13,11 @@ import { notFound } from "./app/middlewares/notFound";
 import { SubscriptionController } from "./app/modules/subscription/sub.controller";
 
 const app: Application = express();
-// app.post("/webhook", express.raw({ type: "application/json" }),PaymentController.handleStripeWebhookEvent )
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  SubscriptionController.webhook,
+);
 app.use(
   cors({
     origin: [
@@ -30,11 +34,7 @@ app.use(
 app.set("view engine", "ejs");
 app.set("views", path.resolve(process.cwd(), `src/app/templates`));
 app.use("/api/auth", toNodeHandler(auth))
-app.post(
-  "/webhook",
-  express.raw({ type: "application/json" }),
-  SubscriptionController.webhook,
-);
+
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cookieParser());

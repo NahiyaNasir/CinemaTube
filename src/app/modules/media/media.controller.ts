@@ -3,6 +3,7 @@ import { sendResponse } from "../shared/sendResponse";
 import { catchAsync } from "../shared/catchAsync";
 import { Request, Response } from "express";
 import { MediaService } from "./media.service";
+import { get } from "node:http";
 
 
 
@@ -32,9 +33,9 @@ const getAllMedia = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getMediaById = catchAsync(async (req: Request, res: Response) => {
+const getMediaBySlug = catchAsync(async (req: Request, res: Response) => {
   const { slug } = req.params;
-  const result = await MediaService.getMediaById(slug as string);
+  const result = await MediaService.getMediaBySlug(slug as string);
 
   sendResponse(res, {
     httpStatusCode: status.OK,
@@ -43,7 +44,17 @@ const getMediaById = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getMediaById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await MediaService.getMediaById(id as string);
 
+  sendResponse(res, {
+    httpStatusCode: status.OK,
+    success: true,
+    message: "Media retrieved successfully",
+    data: result,
+  });
+});
 const updateMedia = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const result = await MediaService.updateMedia(id as string, req.body);
@@ -74,5 +85,6 @@ export const MediaController = {
   getMediaById,
   updateMedia,
   deleteMedia,
+  getMediaBySlug
  
 };

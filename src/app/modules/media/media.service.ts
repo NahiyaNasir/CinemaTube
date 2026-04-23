@@ -1,4 +1,6 @@
+import status from "http-status";
 import { Media } from "../../../generated/prisma/client";
+import AppError from "../../errorHelpers/AppError";
 import { prisma } from "../../lib/prisma";
 
 
@@ -24,23 +26,46 @@ const getAllMedia = async (query: any): Promise<Media[]> => {
   return result;
 };
 
-const getMediaById = async (slug: string): Promise<Media | null> => {
-    await prisma.media.update({
+const getMediaBySlug = async (slug: string): Promise<Media | null> => {
+  const media = await prisma.media.findUnique({
+    where: { slug },
+    include: {
+      genres: true,
+      reviews: true,
+      cast:true,
+    },
+  });
+
+  if (!media) {
+    return null; 
+  }
+
+  // increment view AFTER confirming existence
+  await prisma.media.update({
     where: { slug },
     data: {
       viewCount: { increment: 1 },
     },
   });
+
+  return media;
+};
+export const getMediaById = async (id: string) => {
   const result = await prisma.media.findUnique({
-    where: { slug },
+    where: { id },
     include: {
       genres: true,
-      reviews: true,
+      // platforms: { include: { platform: true } },
+      cast: true,
     },
   });
-  return result;
-};
 
+  if (!result) {
+    throw new AppError(status.NOT_FOUND, "Media not found");
+  }
+
+  return result;
+}
 const updateMedia = async (id: string, data: Partial<Media>): Promise<Media> => {
   const result = await prisma.media.update({
     where: { id },
@@ -62,4 +87,5 @@ export const MediaService = {
   getMediaById,
   updateMedia,
   deleteMedia,
+  getMediaBySlug
 };

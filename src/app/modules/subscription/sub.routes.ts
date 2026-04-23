@@ -6,9 +6,9 @@ import { Role } from "../../../generated/prisma/enums";
 
 const router = Router();
 
+router.post("/checkout", checkAuth(Role.USER, Role.ADMIN), SubscriptionController.createCheckoutSession);
 router.get("/plans", SubscriptionController.getPlans);
 
-router.post("/checkout", checkAuth(Role.USER, Role.ADMIN), SubscriptionController.createCheckoutSession);
 router.get("/status", checkAuth(Role.USER, Role.ADMIN), SubscriptionController.getSubscriptionStatus);
 router.get("/history", checkAuth(Role.USER, Role.ADMIN), SubscriptionController.getPaymentHistory);
 router.delete(

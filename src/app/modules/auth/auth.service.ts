@@ -124,6 +124,7 @@ const getMe = async (user: any) => {
       reviews: true,
       watchList: true,
       bookmarks: true,
+      subscriptions: true,
       _count: {
         select: {
           favorites: true,
@@ -131,6 +132,7 @@ const getMe = async (user: any) => {
           reviews: true,
           watchList: true,
           bookmarks: true,
+          subscriptions: true,
         },
       },
     },

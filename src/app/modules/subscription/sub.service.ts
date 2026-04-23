@@ -108,6 +108,7 @@ const createCheckoutSession = async (
 };
 
 const handleWebhook = async (body: Buffer, signature: string) => {
+    console.log("🔔 Webhook received","thtrjuryjyjyjtyjtitt7utui"); 
   let event: Stripe.Event;
 
   try {
