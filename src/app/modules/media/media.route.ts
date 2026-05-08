@@ -10,7 +10,7 @@ const router = Router();
 router.post(
   "/",
   checkAuth(Role.ADMIN),
-  // validateRequest(MediaValidation.createMediaValidationSchema),
+  validateRequest(MediaValidation.createMediaValidationSchema),
     MediaController.createMedia,
 );
 router.get("/", MediaController.getAllMedia); // Public

@@ -4166,7 +4166,7 @@ app.get("/", async (req, res) => {
     success: true,
     message: "API is working"
   });
-  res.send("Hello, World!");
+
 });
 app.use(globalErrorHandler);
 app.use(notFound);

@@ -145,7 +145,7 @@ const verifyEmail = catchAsync(async (req: Request, res: Response) => {
 
 const sendVerifyOtp = catchAsync(async (req: Request, res: Response) => {
   const {email, type } = req.body;
-
+console.log({email, type},"email and type in controller");
   const result = await authService.verifyEmail(email, type);
 
   sendResponse(res, {

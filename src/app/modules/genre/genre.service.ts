@@ -20,6 +20,7 @@ const createGenre = async (payload: Prisma.GenreCreateInput) => {
 };
 
 const getAllGenres = async (query: Record<string, unknown>) => {
+    console.log("query params:", query);
   const genreQuery = new QueryBuilder(prisma.genre, query as any, {
     searchableFields: ["name", "description"],
     filterableFields: ["isFeatured", "isPublished"],
@@ -29,8 +30,10 @@ const getAllGenres = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields();
+   
 
   const result = await genreQuery.execute();
+  //  console.log(result,"generscontrollers");
   return result;
 };
 
@@ -67,18 +70,18 @@ const deleteGenre = async (id: string) => {
 
 // -------------
 
-const createManyGenre = async (payload: any) => {
-  const result = await prisma.genre.createMany({
-    data: payload,
-    skipDuplicates: true,
-  });
-  return result;
-};
+// const createManyGenre = async (payload: any) => {
+//   const result = await prisma.genre.createMany({
+//     data: payload,
+//     skipDuplicates: true,
+//   });
+//   return result;
+// };
 
 export const GenreService = {
   createGenre,
   getAllGenres,
   updateGenre,
   deleteGenre,
-  createManyGenre,
+  // createManyGenre,
 };

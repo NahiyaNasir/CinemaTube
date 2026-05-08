@@ -7,7 +7,7 @@ import { GenreValidation } from "./genre.validation";
 
 const router = Router();
 
-router.post("/bulk", checkAuth(Role.ADMIN), GenreController.createManyGenre);
+
 
 router.post(
   "/",

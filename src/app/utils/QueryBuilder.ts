@@ -107,8 +107,7 @@ export class QueryBuilder<
 
     return this;
   }
-  // /doctors?searchTerm=john&page=1&sortBy=name&specialty=cardiology&appointmentFee[lt]=100 => {}
-  // { specialty: 'cardiology', appointmentFee: { lt: '100' } }
+ 
   filter(): this {
     const { filterableFields } = this.config;
     const excludedField = [
@@ -144,10 +143,6 @@ export class QueryBuilder<
         filterableFields.length === 0 ||
         filterableFields.includes(key);
 
-      // doctorFilterableFields = ['specialties.specialty.title', 'appointmentFee']
-      // /doctors?appointmentFee[lt]=100&appointmentFee[gt]=50 => { appointmentFee: { lt: '100', gt: '50' } }
-
-      // /doctors?user.name=John => { user: { name: 'John' } }
       if (key.includes(".")) {
         const parts = key.split(".");
 

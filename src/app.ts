@@ -31,15 +31,16 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
-app.set("view engine", "ejs");
-app.set("views", path.resolve(process.cwd(), `src/app/templates`));
-app.use("/api/auth", toNodeHandler(auth))
-
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cookieParser());
 // Enable URL-encoded form data parsing
 app.use(express.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
+app.set("views", path.resolve(process.cwd(), `src/app/templates`));
+app.use("/api/auth", toNodeHandler(auth))
+
+
 
 app.use("/api/v1", IndexRoutes);
 
@@ -50,7 +51,7 @@ app.get("/", async (req: Request, res: Response) => {
     success: true,
     message: "API is working",
   });
-  res.send("Hello, World!");
+
 });
 
 app.use(globalErrorHandler);

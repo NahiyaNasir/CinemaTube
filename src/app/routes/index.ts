@@ -9,6 +9,7 @@ import { PaymentRoutes } from "../modules/payment/payment.route";
 import { SubscriptionRouter } from "../modules/subscription/sub.routes";
 import { MediaRoutes } from "../modules/media/media.route";
 import { ReviewsRoutes } from "../modules/review/review.route";
+import { AdminRoutes } from "../modules/admin/admin.route";
 
 
  const router=Router()
@@ -23,6 +24,7 @@ import { ReviewsRoutes } from "../modules/review/review.route";
    router.use("/subscriptions",  SubscriptionRouter);
    router.use("/media",MediaRoutes)
    router.use("/reviews",ReviewsRoutes)
+   router.use("/admin",AdminRoutes);
   
 
 export const IndexRoutes = router;

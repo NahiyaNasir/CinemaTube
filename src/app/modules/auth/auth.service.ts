@@ -108,7 +108,7 @@ const loginUser = async (payload: ILoginUserPayload) => {
     isDeleted: data.user.isDeleted,
     emailVerified: data.user.emailVerified,
   });
-
+  console.log("better-auth data.token:", typeof data.token, data.token);
   return { ...data, accessToken, refreshToken };
 };
 
@@ -276,25 +276,25 @@ const logOut = async (sessionToken: string) => {
   return result;
 };
 
-const verifyEmail = async (email: string, otp: string) => {
-  const result = await auth.api.verifyEmailOTP({
-    body: {
-      email,
-      otp,
-    },
-  });
-  if (result.status && !result.user.emailVerified) {
-    await prisma.user.update({
-      where: {
-        email,
-      },
-      data: {
-        emailVerified: true,
-      },
-    });
-  }
-  return result;
-};
+// const verifyEmail = async (email: string, otp: string) => {
+//   const result = await auth.api.verifyEmailOTP({
+//     body: {
+//       email,
+//       otp,
+//     },
+//   });
+//   if (result.status && !result.user.emailVerified) {
+//     await prisma.user.update({
+//       where: {
+//         email,
+//       },
+//       data: {
+//         emailVerified: true,
+//       },
+//     });
+//   }
+//   return result;
+// };
 const forgetPassword = async (email: string) => {
   const isUserExist = await prisma.user.findUnique({
     where: {
@@ -408,7 +408,7 @@ export const authService = {
   getMe,
   getNewToken,
   changePassword,
-  verifyEmail,
+  // verifyEmail,
   forgetPassword,
   resetPassword,
   googleLoginSuccess,

@@ -4,6 +4,7 @@ import { catchAsync } from "../shared/catchAsync";
 import { Request, Response } from "express";
 import { MediaService } from "./media.service";
 import { get } from "node:http";
+import { IQueryParams } from "../../interface/QueryBuilder.interface";
 
 
 
@@ -23,7 +24,7 @@ const createMedia = catchAsync(async (req: Request, res: Response) => {
 
 const getAllMedia = catchAsync(async (req: Request, res: Response) => {
   const query = req.query;
-  const result = await MediaService.getAllMedia(query);
+  const result = await MediaService.getAllMedia(query as IQueryParams);
 
   sendResponse(res, {
     httpStatusCode: status.OK,
