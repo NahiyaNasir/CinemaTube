@@ -131,30 +131,30 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const verifyEmail = catchAsync(async (req: Request, res: Response) => {
-  const {email, otp } = req.body;
-  const result = await authService.verifyEmail(email, otp);
+// const verifyEmail = catchAsync(async (req: Request, res: Response) => {
+//   const {email, otp } = req.body;
+//   const result = await authService.verifyEmail(email, otp);
 
-  sendResponse(res, {
-    httpStatusCode: status.OK,
-    success: true,
-    message: "Email verified successfully",
-    data: result,
-  });
-});
+//   sendResponse(res, {
+//     httpStatusCode: status.OK,
+//     success: true,
+//     message: "Email verified successfully",
+//     data: result,
+//   });
+// });
 
-const sendVerifyOtp = catchAsync(async (req: Request, res: Response) => {
-  const {email, type } = req.body;
-console.log({email, type},"email and type in controller");
-  const result = await authService.verifyEmail(email, type);
+// const sendVerifyOtp = catchAsync(async (req: Request, res: Response) => {
+//   const {email, type } = req.body;
+// console.log({email, type},"email and type in controller");
+//   const result = await authService.verifyEmail(email, type);
 
-  sendResponse(res, {
-    httpStatusCode: status.OK,
-    success: true,
-    message: "Verify otp sent successfully",
-    data: result,
-  });
-});
+//   sendResponse(res, {
+//     httpStatusCode: status.OK,
+//     success: true,
+//     message: "Verify otp sent successfully",
+//     data: result,
+//   });
+// });
 
 const getMe = catchAsync(async (req: Request, res: Response) => {
   const result = await authService.getMe(req.user as IRequestUser);
@@ -256,11 +256,11 @@ export const AuthController = {
   forgotPassword,
   resetPassword,
   changePassword,
-  verifyEmail,
+  // verifyEmail,
   getMe,
   getNewToken,
   handleOAuthError,
   googleLogin,
   googleSuccess,
-  sendVerifyOtp,
+  // sendVerifyOtp,
 };

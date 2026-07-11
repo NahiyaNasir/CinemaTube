@@ -95,7 +95,12 @@ const createCheckoutSession = async (
         quantity: 1,
       },
     ],
-
+subscription_data: {
+    metadata: {    
+      userId,
+      plan,
+    },
+  },
     metadata: {
       userId,
       plan,
@@ -108,7 +113,7 @@ const createCheckoutSession = async (
 };
 
 const handleWebhook = async (body: Buffer, signature: string) => {
-    console.log("🔔 Webhook received","thtrjuryjyjyjtyjtitt7utui"); 
+  //  console.log("🔔 Webhook received","thtrjuryjyjyjtyjtitt7utui");  
   let event: Stripe.Event;
 
   try {
@@ -125,8 +130,13 @@ const handleWebhook = async (body: Buffer, signature: string) => {
   }
 
   if (event.type === "checkout.session.completed") {
+;
     const session = event.data.object as Stripe.Checkout.Session;
-    const { userId, plan, mediaId, type } = session.metadata || {};
+ const { userId, plan ,mediaId, type} = session.metadata || 
+                           (session as any).subscription_data?.metadata || {};
+                             
+  // console.log("🔍 Full metadata:", JSON.stringify(session.metadata));
+  // console.log("🔍 Full session:", JSON.stringify(session));
     const stripePaymentId = (session.payment_intent as string) || session.id;
     const amount = (session.amount_total || 0) / 100;
 
@@ -143,38 +153,46 @@ const handleWebhook = async (body: Buffer, signature: string) => {
       } else {
         currentPeriodEnd.setFullYear(currentPeriodEnd.getFullYear() + 1);
       }
-
+console.log("🚀 About to run transaction...");
       await prisma.$transaction(async (tx) => {
-        const updatedSubscription = await tx.subscription.upsert({
-          where: { userId },
-          update: {
-            plan: plan as SubscriptionPlan,
-            status: SubscriptionStatus.ACTIVE,
-            stripeCustomerId: typeof session.customer === "string" ? session.customer : null,
-            currentPeriodStart,
-            currentPeriodEnd,
-          },
-          create: {
-            userId,
-            plan: plan as SubscriptionPlan,
-            status: SubscriptionStatus.ACTIVE,
-            stripeCustomerId: typeof session.customer === "string" ? session.customer : null,
-            currentPeriodStart,
-            currentPeriodEnd,
-          },
-        });
+            console.log("📝 Inside transaction");
+  try {
+    const updatedSubscription = await tx.subscription.upsert({
+      where: { userId },
+      update: {
+        plan: plan as SubscriptionPlan,
+        status: SubscriptionStatus.ACTIVE,
+        stripeCustomerId: typeof session.customer === "string" ? session.customer : null,
+        currentPeriodStart,
+        currentPeriodEnd,
+      },
+      create: {
+        userId,
+        plan: plan as SubscriptionPlan,
+        status: SubscriptionStatus.ACTIVE,
+        stripeCustomerId: typeof session.customer === "string" ? session.customer : null,
+        currentPeriodStart,
+        currentPeriodEnd,
+      },
+    });
 
-        await tx.payment.create({
-          data: {
-            userId,
-            subscriptionId: updatedSubscription.id,
-            amount,
-            currency: session.currency || "usd",
-            stripePaymentId,
-            status: "COMPLETED",
-          },
-        });
-      });
+    await tx.payment.create({
+      data: {
+        userId,
+        subscriptionId: updatedSubscription.id,
+        amount,
+        currency: session.currency || "usd",
+        stripePaymentId,
+        status: "COMPLETED",
+      },
+    }); console.log("✅ Transaction complete!");
+
+   
+  } catch (err) {
+    console.error("❌ DB Error:", err); // ← this will show the real error
+    throw err;
+  }
+});
     }
 
     // ─── CASE 2: MEDIA PURCHASE (BUY OR RENTAL) ──────────────────────

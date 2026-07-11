@@ -70,14 +70,14 @@ export const auth = betterAuth({
   //   sendOnSignIn: true,
   //   autoSignInAfterVerification: true,
   // },
-   session: {
-    expiresIn: 60 * 60 * 60 * 24, // 1 day in seconds
-    updateAge: 60 * 60 * 60 * 24, // 1 day in seconds
-    cookieCache: {
-      enabled: true,
-      maxAge: 60 * 60 * 60 * 24, // 1 day in seconds
-    },
+ session: {
+  expiresIn: 60 * 60 * 24,  // ✅ 86400 = 1 day
+  updateAge: 60 * 60 * 24,  // ✅ 86400 = 1 day
+  cookieCache: {
+    enabled: true,
+    maxAge: 5 * 60,          // ✅ 300 = 5 minutes
   },
+},
    plugins: [
     bearer(),
     // emailOTP({
@@ -97,10 +97,6 @@ export const auth = betterAuth({
     //         return;
     //       }
 
-    //       //    if(user && user.role === Role.SUPER_ADMIN){
-    //       //     console.log(`User with email ${email} is a super admin. Skipping sending verification OTP.`);
-    //       //     return;
-    //       //    }
 
     //       if (user && !user.emailVerified) {
     //         sendEmail({

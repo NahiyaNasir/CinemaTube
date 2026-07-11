@@ -50,6 +50,7 @@ const getAllPayments = async (query: Record<string, unknown>) => {
 };
 
 const getMyMediaPurchases = async (user: IRequestUser) => {
+  console.log("Current User ID:", user.userId);
   return await prisma.mediaPurchase.findMany({
     where: { userId: user.userId },
     include: { media: true },

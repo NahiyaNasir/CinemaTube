@@ -8,6 +8,7 @@ model Media {
   director       String
   posterUrl      String?
   backdropUrl    String?
+   images         String[] @default([])
   trailerUrl     String?
   streamingUrl   String?
   rentalPrice    Decimal? @db.Decimal(10, 2)
@@ -54,6 +55,7 @@ model CastMember {
   name    String
   role    String
   image   String?
+
   mediaId String
   media   Media   @relation(fields: [mediaId], references: [id], onDelete: Cascade)
 

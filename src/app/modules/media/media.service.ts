@@ -26,6 +26,7 @@ const createMedia = async (data: any): Promise<Media> => {
 
       posterUrl: data.posterUrl || null,
       backdropUrl: data.backdropUrl || null,
+       images: Array.isArray(data.images) ? data.images : [],
       trailerUrl: data.trailerUrl || null,
       streamingUrl: data.streamingUrl || null,
       rentalPrice:
@@ -88,8 +89,8 @@ export const getAllMedia = async (query: IQueryParams) => {
       genres: true,
       cast: true,
     });
-  // .dynamicInclude(mediaIncludeConfig);
-
+  // console.log(mediaQuery,"mediacon");
+        
   return await mediaQuery.execute();
 };
 
