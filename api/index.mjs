@@ -1281,6 +1281,7 @@ var resetPassword2 = catchAsync(async (req, res) => {
 });
 var changePassword2 = catchAsync(async (req, res) => {
   const payload = req.body;
+  console.log(req.body);
   const sessionToken = req.cookies["better-auth.session_token"];
   const result = await authService.changePassword(payload, sessionToken);
   const { accessToken, refreshToken, token, ...rest } = result;
@@ -1408,7 +1409,7 @@ var registerSchema = z.object({
   rememberMe: z.boolean().optional()
 });
 var changePasswordSchema = z.object({
-  oldPassword: z.string().min(6, "Password must be at least 6 characters long"),
+  currentPassword: z.string().min(6, "Password must be at least 6 characters long"),
   newPassword: z.string().min(6, "Password must be at least 6 characters long")
   // .regex(
   //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
@@ -2018,10 +2019,9 @@ var getUserById2 = catchAsync(async (req, res) => {
   });
 });
 var updateProfile2 = catchAsync(async (req, res) => {
-  const result = await UserService.updateProfile(
-    req.params.id,
-    req.body
-  );
+  const userId = req.user.userId;
+  const { name, image } = req.body;
+  const result = await UserService.updateProfile(userId, { name, image });
   sendResponse(res, {
     httpStatusCode: status5.OK,
     success: true,
