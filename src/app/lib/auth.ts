@@ -80,59 +80,59 @@ export const auth = betterAuth({
 },
    plugins: [
     bearer(),
-    // emailOTP({
-    //   overrideDefaultEmailVerification: true,
-    //   async sendVerificationOTP({ email, otp, type }) {
-    //     if (type === "email-verification") {
-    //       const user = await prisma.user.findUnique({
-    //         where: {
-    //           email,
-    //         },
-    //       });
+    emailOTP({
+      overrideDefaultEmailVerification: true,
+      async sendVerificationOTP({ email, otp, type }) {
+        if (type === "email-verification") {
+          const user = await prisma.user.findUnique({
+            where: {
+              email,
+            },
+          });
 
-    //       if (!user) {
-    //         console.error(
-    //           `User with email ${email} not found. Cannot send verification OTP.`,
-    //         );
-    //         return;
-    //       }
+          if (!user) {
+            console.error(
+              `User with email ${email} not found. Cannot send verification OTP.`,
+            );
+            return;
+          }
 
 
-    //       if (user && !user.emailVerified) {
-    //         sendEmail({
-    //           to: email,
-    //           subject: "Verify your email",
-    //           templateName: "otp",
-    //           templateData: {
-    //             name: user.name,
-    //             otp,
-    //           expires:2 * 60, // 2 minutes in seconds
-    //           },
-    //         });
-    //       }
-    //     } else if (type === "forget-password") {
-    //       const user = await prisma.user.findUnique({
-    //         where: {
-    //           email,
-    //         },
-    //       });
+          if (user && !user.emailVerified) {
+            sendEmail({
+              to: email,
+              subject: "Verify your email",
+              templateName: "otp",
+              templateData: {
+                name: user.name,
+                otp,
+              expires:2 * 60, // 2 minutes in seconds
+              },
+            });
+          }
+        } else if (type === "forget-password") {
+          const user = await prisma.user.findUnique({
+            where: {
+              email,
+            },
+          });
 
-    //       if (user) {
-    //         sendEmail({
-    //           to: email,
-    //           subject: "Password Reset OTP",
-    //           templateName: "reset",
-    //           templateData: {
-    //             name: user.name,
-    //             otp,
-    //           },
-    //         });
-    //       }
-    //     }
-    //   },
-    //   expiresIn: 2 * 60, // 2 minutes in seconds
-    //   otpLength: 6,
-    // }),
+          if (user) {
+            sendEmail({
+              to: email,
+              subject: "Password Reset OTP",
+              templateName: "reset",
+              templateData: {
+                name: user.name,
+                otp,
+              },
+            });
+          }
+        }
+      },
+      expiresIn: 2 * 60, // 2 minutes in seconds
+      otpLength: 6,
+    }),
   ],
     
   

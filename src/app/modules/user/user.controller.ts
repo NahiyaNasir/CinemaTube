@@ -30,10 +30,9 @@ const getUserById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateProfile = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.updateProfile(
-    req.params.id as string,
-    req.body,
-  );
+  const userId = (req as any).user.userId as string;
+  const { name, image } = req.body;
+  const result = await UserService.updateProfile(userId, { name, image });
 
   sendResponse(res, {
     httpStatusCode: status.OK,
@@ -42,7 +41,6 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
   const result = await UserService.deleteUser(req.params.id as string);
 
