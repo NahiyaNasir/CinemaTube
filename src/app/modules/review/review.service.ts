@@ -134,8 +134,8 @@ const updateMediaRating = async (mediaId: string) => {
   await prisma.media.update({
     where: { id: mediaId },
     data: {
-     averageRating: stats._avg.rating || 0,
-      totalRatings: stats._count.id,
+      avgRating: stats._avg.rating || 0,
+      reviewCount: stats._count.id,
     },
   });
 };
