@@ -2062,7 +2062,7 @@ var UserController = {
 var router2 = Router2();
 router2.get("/", checkAuth(Role.ADMIN), UserController.getAllUsers);
 router2.get("/:id", checkAuth(Role.ADMIN), UserController.getUserById);
-router2.patch("/profile", checkAuth(Role.USER), UserController.updateProfile);
+router2.patch("/profile", checkAuth(Role.USER, Role.ADMIN), UserController.updateProfile);
 router2.delete("/:id", checkAuth(Role.ADMIN), UserController.deleteUser);
 router2.patch("/:id/status", checkAuth(Role.ADMIN), UserController.changeStatus);
 var userRoutes = router2;
@@ -3669,8 +3669,8 @@ var updateMediaRating = async (mediaId) => {
   await prisma.media.update({
     where: { id: mediaId },
     data: {
-      averageRating: stats._avg.rating || 0,
-      totalRatings: stats._count.id
+      avgRating: stats._avg.rating || 0,
+      reviewCount: stats._count.id
     }
   });
 };

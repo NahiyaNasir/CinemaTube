@@ -40,17 +40,17 @@ router.post(
   validateRequest(AuthValidation.resetPasswordSchema),
   AuthController.resetPassword,
 );
-// router.post(
-//   "/verify-email",
-//   validateRequest(AuthValidation.verifyEmailSchema),
-//   AuthController.verifyEmail,
-// );
+router.post(
+  "/verify-email",
+  validateRequest(AuthValidation.verifyEmailSchema),
+  AuthController.verifyEmail,
+);
 
-// router.post(
-//   "/send-verify-otp",
-//   validateRequest(AuthValidation.sendVerifyOtpSchema),
-//   AuthController.sendVerifyOtp,
-// );
+router.post(
+  "/send-verify-otp",
+  validateRequest(AuthValidation.sendVerifyOtpSchema),
+  AuthController.sendVerifyOtp,
+);
 
 router.get("/login/google", AuthController.googleLogin);
 router.get("/google/success", AuthController.googleSuccess);

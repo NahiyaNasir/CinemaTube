@@ -276,25 +276,69 @@ const logOut = async (sessionToken: string) => {
   return result;
 };
 
-// const verifyEmail = async (email: string, otp: string) => {
-//   const result = await auth.api.verifyEmailOTP({
-//     body: {
-//       email,
-//       otp,
-//     },
-//   });
-//   if (result.status && !result.user.emailVerified) {
-//     await prisma.user.update({
-//       where: {
-//         email,
-//       },
-//       data: {
-//         emailVerified: true,
-//       },
-//     });
-//   }
-//   return result;
-// };
+const verifyEmail = async (email: string, otp: string) => {
+  const result = await auth.api.verifyEmailOTP({
+    body: {
+      email,
+      otp,
+    },
+  });
+  if (result.status && !result.user.emailVerified) {
+    await prisma.user.update({
+      where: {
+        email,
+      },
+      data: {
+        emailVerified: true,
+      },
+    });
+  }
+  return result;
+};
+
+const sendVerifyOtp = async (
+  email: string,
+  type: "sign-in" | "email-verification" | "forget-password" | "change-email",
+) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) {
+    throw new AppError(status.FORBIDDEN, "User not found");
+  }
+
+  if (user.emailVerified) {
+    throw new AppError(status.FORBIDDEN, "User already verified");
+  }
+
+  if (user.status === UserStatus.PENDING) {
+    throw new AppError(
+      status.FORBIDDEN,
+      "User pending. Please contact support team.",
+    );
+  }
+
+  if (user.isDeleted || user.status === UserStatus.DELETED) {
+    throw new AppError(status.FORBIDDEN, "User not found.");
+  }
+
+  if (user.status === UserStatus.BLOCKED) {
+    throw new AppError(
+      status.FORBIDDEN,
+      "User blocked. Please contact support team.",
+    );
+  }
+
+  await auth.api.sendVerificationOTP({
+    body: {
+      email,
+      type,
+    },
+  });
+};
 const forgetPassword = async (email: string) => {
   const isUserExist = await prisma.user.findUnique({
     where: {
@@ -408,7 +452,8 @@ export const authService = {
   getMe,
   getNewToken,
   changePassword,
-  // verifyEmail,
+  verifyEmail,
+  sendVerifyOtp,
   forgetPassword,
   resetPassword,
   googleLoginSuccess,
