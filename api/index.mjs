@@ -1095,6 +1095,59 @@ var logOut = async (sessionToken) => {
   });
   return result;
 };
+var verifyEmail = async (email, otp) => {
+  const result = await auth.api.verifyEmailOTP({
+    body: {
+      email,
+      otp
+    }
+  });
+  if (result.status && !result.user.emailVerified) {
+    await prisma.user.update({
+      where: {
+        email
+      },
+      data: {
+        emailVerified: true
+      }
+    });
+  }
+  return result;
+};
+var sendVerifyOtp = async (email, type) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email
+    }
+  });
+  if (!user) {
+    throw new AppError_default(status.FORBIDDEN, "User not found");
+  }
+  if (user.emailVerified) {
+    throw new AppError_default(status.FORBIDDEN, "User already verified");
+  }
+  if (user.status === UserStatus.PENDING) {
+    throw new AppError_default(
+      status.FORBIDDEN,
+      "User pending. Please contact support team."
+    );
+  }
+  if (user.isDeleted || user.status === UserStatus.DELETED) {
+    throw new AppError_default(status.FORBIDDEN, "User not found.");
+  }
+  if (user.status === UserStatus.BLOCKED) {
+    throw new AppError_default(
+      status.FORBIDDEN,
+      "User blocked. Please contact support team."
+    );
+  }
+  await auth.api.sendVerificationOTP({
+    body: {
+      email,
+      type
+    }
+  });
+};
 var forgetPassword = async (email) => {
   const isUserExist = await prisma.user.findUnique({
     where: {
@@ -1191,7 +1244,8 @@ var authService = {
   getMe,
   getNewToken,
   changePassword,
-  // verifyEmail,
+  verifyEmail,
+  sendVerifyOtp,
   forgetPassword,
   resetPassword,
   googleLoginSuccess
@@ -1300,6 +1354,27 @@ var changePassword2 = catchAsync(async (req, res) => {
     }
   });
 });
+var verifyEmail2 = catchAsync(async (req, res) => {
+  const { email, otp } = req.body;
+  const result = await authService.verifyEmail(email, otp);
+  sendResponse(res, {
+    httpStatusCode: status2.OK,
+    success: true,
+    message: "Email verified successfully",
+    data: result
+  });
+});
+var sendVerifyOtp2 = catchAsync(async (req, res) => {
+  const { email, type } = req.body;
+  console.log({ email, type }, "email and type in controller");
+  const result = await authService.sendVerifyOtp(email, type);
+  sendResponse(res, {
+    httpStatusCode: status2.OK,
+    success: true,
+    message: "Verify otp sent successfully",
+    data: result
+  });
+});
 var getMe2 = catchAsync(async (req, res) => {
   const result = await authService.getMe(req.user);
   sendResponse(res, {
@@ -1378,13 +1453,13 @@ var AuthController = {
   forgotPassword,
   resetPassword: resetPassword2,
   changePassword: changePassword2,
-  // verifyEmail,
+  verifyEmail: verifyEmail2,
   getMe: getMe2,
   getNewToken: getNewToken2,
   handleOAuthError,
   googleLogin,
-  googleSuccess
-  // sendVerifyOtp,
+  googleSuccess,
+  sendVerifyOtp: sendVerifyOtp2
 };
 
 // src/app/modules/auth/auth.validate.ts
@@ -1556,6 +1631,16 @@ router.post(
   "/reset-password",
   validateRequest(AuthValidation.resetPasswordSchema),
   AuthController.resetPassword
+);
+router.post(
+  "/verify-email",
+  validateRequest(AuthValidation.verifyEmailSchema),
+  AuthController.verifyEmail
+);
+router.post(
+  "/send-verify-otp",
+  validateRequest(AuthValidation.sendVerifyOtpSchema),
+  AuthController.sendVerifyOtp
 );
 router.get("/login/google", AuthController.googleLogin);
 router.get("/google/success", AuthController.googleSuccess);
