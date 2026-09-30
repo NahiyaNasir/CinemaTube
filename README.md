@@ -2,7 +2,7 @@
 # 🎬 CinemaTube
 A backend API for a movie platform, built with **Express 5**, **TypeScript**, **Prisma** and **PostgreSQL**. It includes authentication, email, and Stripe payments, and is deployed on **Vercel**.
 
-![Project diagram](./docs/diagram.png)
+![Project diagram]
 <img width="9800" height="3265" alt="diagram" src="https://github.com/user-attachments/assets/2d7ca7bc-a71d-4600-adae-a5c7dd99d82d" />
 
 
