@@ -22,6 +22,11 @@ jobs:
       EMAIL_SENDER_SMTP_HOST: smtp.example.com
       EMAIL_SENDER_SMTP_PORT: "587"
       EMAIL_SENDER_SMTP_FROM: test@example.com
+      FRONTEND_URL: http://localhost:3000
+      STRIPE_SECRET_KEY: sk_test_dummy
+      STRIPE_WEBHOOK_SECRET: whsec_dummy
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_PASSWORD: test-admin-password
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
