@@ -24,9 +24,7 @@ Promise.all([p1, p2, p3])
         console.error('Failed to start server:', error);
     }   
 }
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', uptime: process.uptime() });
-});
+
 // SIGTERM signal handler
 process.on("SIGTERM", () => {
     console.log("SIGTERM signal received. Shutting down server...");

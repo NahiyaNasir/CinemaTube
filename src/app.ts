@@ -34,6 +34,9 @@ app.use(
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cookieParser());
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', uptime: process.uptime() });
+});
 // Enable URL-encoded form data parsing
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
