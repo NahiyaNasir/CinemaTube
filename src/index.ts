@@ -9,6 +9,13 @@ import { seedAdmin } from './app/utils/seedAdmin';
 let server : Server;
 const bootstrap =async () => {
    try {
+const p1 = Promise.resolve("A");
+const p2 = Promise.reject("B");
+const p3 = Promise.resolve("C");
+
+Promise.all([p1, p2, p3])
+    .then(console.log)
+    .catch(console.log);
         await seedAdmin();
         server = app.listen(envVars.PORT, () => {
             console.log(`Server is running on http://localhost:${envVars.PORT}`);
@@ -17,7 +24,9 @@ const bootstrap =async () => {
         console.error('Failed to start server:', error);
     }   
 }
-
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', uptime: process.uptime() });
+});
 // SIGTERM signal handler
 process.on("SIGTERM", () => {
     console.log("SIGTERM signal received. Shutting down server...");
