@@ -65,11 +65,10 @@ export const auth = betterAuth({
       },
     },
   },
-  //   emailVerification: {
-  //   sendOnSignUp: true,
-  //   sendOnSignIn: true,
-  //   autoSignInAfterVerification: true,
-  // },
+    emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+  },
  session: {
   expiresIn: 60 * 60 * 24,  // ✅ 86400 = 1 day
   updateAge: 60 * 60 * 24,  // ✅ 86400 = 1 day
@@ -82,6 +81,7 @@ export const auth = betterAuth({
     bearer(),
     emailOTP({
       overrideDefaultEmailVerification: true,
+        sendVerificationOnSignUp: true, 
       async sendVerificationOTP({ email, otp, type }) {
         if (type === "email-verification") {
           const user = await prisma.user.findUnique({
@@ -99,7 +99,7 @@ export const auth = betterAuth({
 
 
           if (user && !user.emailVerified) {
-            sendEmail({
+         await   sendEmail({
               to: email,
               subject: "Verify your email",
               templateName: "otp",
@@ -118,7 +118,7 @@ export const auth = betterAuth({
           });
 
           if (user) {
-            sendEmail({
+         await   sendEmail({
               to: email,
               subject: "Password Reset OTP",
               templateName: "reset",
